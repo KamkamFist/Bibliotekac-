@@ -1,35 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Bibliotekac { 
-
+namespace Biblioteka
+{
+    [Serializable]
     public class Book
     {
-        public int Id { get; set; } = Guid.NewGuid().GetHashCode();
         public string Title { get; set; }
         public string Author { get; set; }
+        public int Year { get; set; }
+        public bool IsBorrowed { get; set; } = false;
+        public string BorrowedBy { get; set; } = "";
+        public DateTime? BorrowDate { get; set; }
 
-        public bool IsAvailable { get; set; } = true;
+        public Book() { }
 
-        public void MarkAsCheckedOut()
-        {
-            IsAvailable = false;
-        }
-
-
-        public void MarkAsAvailable()
-        {
-            IsAvailable = true;
-        }
-
-        public Book(string title, string author)
+        public Book(string title, string author, int year)
         {
             Title = title;
             Author = author;
+            Year = year;
+        }
+
+        public override string ToString()
+        {
+            string status = IsBorrowed
+                ? $"Wypożyczona przez {BorrowedBy} dnia {BorrowDate?.ToShortDateString()}"
+                : "Dostępna";
+            return $"{Title} - {Author} ({Year}) [{status}]";
         }
     }
 }
